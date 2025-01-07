@@ -1,5 +1,5 @@
 .vscode/launch.json
-.vscode/app.json
+app.json
 .vscode/
 *.app
 *.pfx
