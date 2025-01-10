@@ -26,7 +26,7 @@ tableextension 50111 "Item Jnl Line" extends "Item Journal Line"
             ErrorMessageManagement.LogSimpleErrorMessage('Location Code must be filled in.');
 
         if Rec.Quantity = 0 then
-            ErrorMessageManagement.LogError(Rec, 'Quantity must be filled in.', '');
+            ErrorMessageManagement.LogError(Rec, 'Quantity must be filled in.', 'BLOCKED CUSTOMER');
     end;
 
 }
