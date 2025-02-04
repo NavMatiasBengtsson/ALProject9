@@ -6,11 +6,31 @@ codeunit 50134 "ImageBlobManagment"
         InStr: InStream;
         OutStr: OutStream;
         FileName: Text;
-
+        NextItemNo: Code[20];
+        LastItemNoInt: Integer;
     begin
+        if ItemNo = '' then begin
+            // Find last item number and increment
+            ItemRec.Reset();
+            if ItemRec.FindLast() then begin
+                if Evaluate(LastItemNoInt, ItemRec."Item No.") then
+                    LastItemNoInt := LastItemNoInt + 1
+                else
+                    Error('Failed to evaluate item number.');
+                NextItemNo := Format(LastItemNoInt);
+            end else
+                NextItemNo := '1000'; // Start at 1000 if no records exist
+
+            ItemNo := NextItemNo;
+            ItemRec.Init();
+            ItemRec."Item No." := ItemNo;
+            ItemRec.Insert();
+        end;
+
         if UploadIntoStream('Select an Image', '', 'All Files (*.*)|*.*', FileName, InStr) then begin
             if ItemRec.Get(ItemNo) then begin
                 ItemRec."Item Image".CreateOutStream(OutStr);
+                CopyStream(OutStr, InStr);
                 ItemRec.Modify;
                 Message('Image uploaded successfully to BLOB.');
             end else
